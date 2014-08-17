@@ -1,7 +1,7 @@
 Vim-PICAXE
 ==========
 
-Syntax highlighting and indentation for for PICAXE microprocessor programming language.
+Syntax highlighting and indentation for PICAXE microprocessor programming language.
 
 Installation
 ==========
