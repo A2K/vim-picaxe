@@ -12,7 +12,7 @@ Install Vundle and add this line to your .vimrc:
 
 Then create filetype rule with this line:
 
-`autocmd BufRead,BufNewFile \*.bs setfiletype picaxe`
+`autocmd BufRead,BufNewFile *.bs setfiletype picaxe`
 
 Credits
 ==========
