@@ -1,12 +1,7 @@
 " Vim syntax file
 " Language:    Picaxe
-" Maintainer:  Peter Recktenwald <p.recktenwald@gmail.com>
-" Last Change: 2010 Jul 12
+" Last Change: 2014 Aug 17
 
-" Syntax highlighting like in the Picaxe IDE
-
-" For version 5.x: Clear all syntax items
-" For version 6.x: Quit when a syntax file was already loaded
 if version < 600
   syntax clear
 elseif exists("b:current_syntax")
@@ -33,7 +28,6 @@ syn match Identifier  "[bB]\d"
 syn match Identifier  "outpins[ABC].\d"
 syn match Identifier  "cr"
 syn match Identifier  "lf"
-
 
 syn keyword picaxeStatement if then endif goto gosub return branch 
 syn keyword picaxeStatement for next end to
