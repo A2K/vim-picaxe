@@ -14,7 +14,7 @@ Then create filetype rule with this line:
 
 autocmd BufRead,BufNewFile \*.bs setfiletype picaxe
 
-Credists
+Credits
 ==========
 
 Syntax file is based on file created by robotfreak https://code.google.com/p/robotfreak/
