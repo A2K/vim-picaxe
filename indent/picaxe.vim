@@ -3,9 +3,9 @@ if exists("b:did_indent")
 endif
 let b:did_indent = 1
 
-setlocal indentexpr=GetPicaxeIndent()
+setlocal indentexpr=GetPicaxeIndent(v:lnum)
 
-setlocal indentkeys+=0=:
+setlocal indentkeys+=0e,0n,0t
 
 setlocal autoindent
 
@@ -13,36 +13,52 @@ if exists("*GetPicaxeIndent")
   finish
 endif
 
-function! GetPicaxeIndent()
-  " Find a non-blank line above the current line.
-  let prevlnum = prevnonblank(v:lnum - 1)
-  let curline = getline(v:lnum)
+let s:label_rx = '^\s*[a-zA-Z][a-zA-Z0-9]\+:\s*$'
 
-  if match(curline, '^\s*\<[a-zA-Z0-9]\+:') != -1 
+function! GetPicaxeIndent( line )
+
+  let curline = getline(a:line)
+
+  if curline =~ s:label_rx
     return 0
   endif
 
-  while prevlnum != 0 && match(getline(prevlnum), '^\<[a-zA-Z0-9]\+:') != -1 
-    let prevlnum = prevnonblank(prevlnum-1)
+  let prevlabel = prevnonblank(a:line - 1)
+  while prevlabel != 0 && !(getline(prevlabel) =~ s:label_rx)
+    let prevlabel = prevnonblank(prevlabel - 1)
   endwhile
 
-  " Hit the start of the file, use zero indent.
-  if prevlnum == 0
-    return &shiftwidth
+  let prevlnum = prevnonblank(a:line - 1)
+  while prevlnum != 0 && getline(prevlnum) =~ s:label_rx
+    let prevlnum = prevnonblank(prevlnum - 1)
+  endwhile
+
+  let ind = 0
+  if prevlnum != 0
+    let ind = indent(prevlnum)
+  else
+    if prevlabel != 0
+      let ind = &sw
+    else
+      let ind = 0
+    endif
   endif
 
-  let ind = indent(prevlnum)
   let prevline = getline(prevlnum)
 
-  if match(prevline, '^\s*\<for\>') != -1 || match(prevline, '^\s*\<if\>.\+\<then\>\s*$') != -1  || match(prevline, '^\s*\<else\>') != -1
-    let ind = ind + &shiftwidth
+  if prevline =~ '^\s*\<for\>' || prevline =~ '^\s*if\>.\+\<then\s*$'  || prevline =~ '^\s*else\s*$'
+    let ind = ind + &sw
   endif
 
-  if match(curline, '^\s*\<next\>') != -1 || match(curline, '^\s*\<endif\>') != -1 || match(curline, '^\s*\<else\>') != -1 
-    let ind = ind - &shiftwidth
+  if curline =~ '^\s*\(next\|endif\|else\)\s*$'
+    let ind = ind - &sw
   endif
 
-  let ind = max(ind, 0)
+  let ind = max(0, ind)
+
+  if ind == 0 && prevlabel != 0
+    let ind = ind + &sw
+  endif
 
   return ind
 
