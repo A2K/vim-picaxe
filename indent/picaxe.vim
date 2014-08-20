@@ -5,7 +5,9 @@ let b:did_indent = 1
 
 setlocal indentexpr=GetPicaxeIndent(v:lnum)
 
-setlocal indentkeys+=0e,0n,0t
+setlocal indentkeys&
+setlocal indentkeys+===next,==else,==endif
+setlocal indentkeys+=o,<:>
 
 setlocal autoindent
 
